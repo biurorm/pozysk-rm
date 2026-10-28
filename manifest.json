@@ -1,0 +1,16 @@
+{
+  "name": "Pozysk, RM Nieruchomości",
+  "short_name": "Pozysk RM",
+  "description": "Codzienne telefony do właścicieli z ogłoszeń: kogo dziś dzwonić, wynik rozmowy, link do ogłoszenia, wyniki agentów",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f5f4",
+  "theme_color": "#094d47",
+  "lang": "pl",
+  "categories": ["business", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
