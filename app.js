@@ -1,7 +1,7 @@
 // POZYSK RM: codzienne telefony do właścicieli z ogłoszeń, kolumny jak w arkuszu „Pozysk Klienta, Generał, Codziennie”
 // Dane w bazie Zadań RM (Supabase, to samo logowanie). Bez config.js albo z ?proba: tryb próbny w tej przeglądarce.
 // Listy do wybierania (i agenci) są w bazie, każdy wpis „Inne” dopisuje się do listy sam.
-const WERSJA = 'v1';
+const WERSJA = 'v2';
 
 // kolumny arkusza, tytuły bez zmian
 const KOLUMNY = [['nr', 'LP'], ['nieruchomosc', 'NIERUCHOMOŚĆ'], ['rynek', 'WTÓRNY/ PIERWOTNY'], ['transakcja', 'SPRZEDAŻ/ WYNAJEM'],
@@ -67,7 +67,14 @@ function portal(l) {
   const h = new URL(u).hostname.replace(/^www\./, '');
   return (PORTALE.find(([k]) => h.includes(k)) || [, h])[1];
 }
-const linkKlucz = (l) => { const u = linkUrl(l); if (!u) return ''; const x = new URL(u); return (x.hostname.replace(/^www\./, '') + x.pathname).replace(/\/$/, '').toLowerCase(); };
+// klucz do wykrywania duplikatów; aplikacje typu NBot trzymają numer oferty po #/ (app.nbot.pl/#/base/offer/26329502/list), więc taki # wchodzi do klucza
+const linkKlucz = (l) => {
+  const u = linkUrl(l); if (!u) return ''; const x = new URL(u);
+  const nbot = x.hash.match(/offer\/(\d+)/);
+  if (/nbot\.pl$/.test(x.hostname) && nbot) return 'nbot/offer/' + nbot[1];
+  const trasa = /^#!?\//.test(x.hash) ? x.hash.replace(/^#!?/, '') : '';
+  return (x.hostname.replace(/^www\./, '') + x.pathname.replace(/\/$/, '') + trasa).replace(/\/$/, '').toLowerCase();
+};
 
 // stany kontaktu
 const zamkniety = (r) => /^(podpisana|zamkni)/.test(norm(r.status)) || /^zamkni/.test(norm(r.dalsze));
